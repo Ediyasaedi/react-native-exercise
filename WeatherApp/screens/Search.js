@@ -5,7 +5,7 @@ import Header from './Header';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default Search = ({ navigation }) => {
+const Search = (props) => {
   const [city, setCity] = useState('')
   const [cities, setCities] = useState([
     {'city': 'Jakarta, Indonesia'}, {'city': 'Bandung, Indonesia'}, {'city': 'Surabaya, Indonesia'},
@@ -16,7 +16,7 @@ export default Search = ({ navigation }) => {
   const btnOnClick = async () => {
     try {
       await AsyncStorage.setItem('savedCity', city)
-      navigation.navigate("Home", {city: city})
+      props.navigation.navigate("Home", {city: city})
     } catch (e) {
       // saving error
     }
@@ -57,3 +57,5 @@ export default Search = ({ navigation }) => {
     </View>
   );
 };
+
+export default Search;

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Title } from 'react-native-paper';
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import Header from './Header';
-
+import {API_KEY} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default Home = (props) => {
@@ -16,7 +16,7 @@ export default Home = (props) => {
 
     useEffect(() => {
         getWeather()
-    }, [])
+    }, [props.route.params.city])
 
     const getWeather = async () => {
         console.log("getWeather function is called")
@@ -26,7 +26,7 @@ export default Home = (props) => {
             myCity = city;
         }
 
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${myCity}&APPID=86b4ded5d6053e3a5bb7813fb4ed47f3&units=metric`)
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${myCity}&APPID=${API_KEY}&units=metric`)
         .then(data => data.json())
         .then(res => {
             setInfo({
@@ -41,10 +41,6 @@ export default Home = (props) => {
             alert(err.message)
         })
 
-    }
-    
-    if(props.route.params.city != 'jakarta'){
-        getWeather()
     }
 
     return (
@@ -71,9 +67,10 @@ export default Home = (props) => {
                margin: 5,
                padding: 12
            }}>
-               <Title style={{ color: '#00aaff' }}>Temperature: {info.temp}</Title>
-               <Title style={{ color: '#00aaff' }}>Humadity: {info.humidity}</Title>
-               <Title style={{ color: '#00aaff' }}>Description: {info.desc}</Title>
+               <Title style={{ color: '#00aaff' }}>Detail:</Title>
+               <Text style={{ color: '#00aaff' }}>Temperature: {info.temp}</Text>
+               <Text style={{ color: '#00aaff' }}>Humadity: {info.humidity}</Text>
+               <Text style={{ color: '#00aaff' }}>Description: {info.desc}</Text>
            </Card>
         </View>
     )
