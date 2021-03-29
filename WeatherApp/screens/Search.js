@@ -3,13 +3,24 @@ import { TextInput, Button, Card } from 'react-native-paper';
 import { View, Text, FlatList } from 'react-native';
 import Header from './Header';
 
-export default Search = () => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export default Search = ({ navigation }) => {
   const [city, setCity] = useState('')
   const [cities, setCities] = useState([
     {'city': 'Jakarta, Indonesia'}, {'city': 'Bandung, Indonesia'}, {'city': 'Surabaya, Indonesia'},
     {'city': 'Bangkok, Thailand'}, {'city': 'Kuala Lumpur, Malaysia'}, {'city': 'Hanoi, Vietnam'},
     {'city': 'Tokyo, Japan'}, {'city': 'New Delhi, India'}, {'city': 'Doha, Qatar'}
   ])
+
+  const btnOnClick = async () => {
+    try {
+      await AsyncStorage.setItem('savedCity', city)
+      navigation.navigate("Home", {city: city})
+    } catch (e) {
+      // saving error
+    }
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -24,7 +35,7 @@ export default Search = () => {
           <Button 
             icon="content-save" 
             mode="contained" 
-            onPress={() => console.log('Pressed')} 
+            onPress={() => btnOnClick()} 
             theme={{ colors:{primary: '#00aaff'}}}
             style={{ width: 175, margin: 10}}>
             <Text style={{ color: 'white'}}>Save Changes</Text>
@@ -35,11 +46,9 @@ export default Search = () => {
           renderItem={({ item }) => {
             return(
               <Card 
-                style={{ margin: 5, padding: 10 }}
+                onPress={() => setCity(item.city)} style={{ alignItems: 'flex-start', margin: 5, padding: 15}}
               >
-              <Button onPress={() => setCity(item.city)} style={{ alignItems: 'flex-start'}}>
                 <Text style={{ color: 'black' }}>{item.city}</Text>
-              </Button>
               </Card>
             )
           }}
